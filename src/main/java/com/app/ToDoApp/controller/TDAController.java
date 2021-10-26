@@ -1,46 +1,43 @@
 package com.app.ToDoApp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.app.ToDoApp.model.Todo;
 import com.app.ToDoApp.model.TodoRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("")
+import java.util.List;
+
+@RestController
 public class TDAController {
-	
+
+    private final TodoRepo todoRepo;
+
 	@Autowired
-	TodoRepo todoRepo;
+	public TDAController(TodoRepo todoRepo) {
+		this.todoRepo = todoRepo;
+	}
 
 	@GetMapping("/todos")
-	public Iterable<Todo> todos() {
-		return todoRepo.findAll(); 
-		
-	}
-	
-	@PostMapping("/todos/create")
-	public Todo save(@RequestBody Todo todoObj) {
-		todoRepo.save(todoObj);
-		return todoObj; 
-	}
-	
-	@DeleteMapping("/todos/{Task}")
-	public String delete(@PathVariable String Task) { 
+    public List<Todo> todos() {
+        return todoRepo.findAll();
+    }
 
-			java.util.Optional<Todo> todo = todoRepo.findById(Task);
-			if(todo.isPresent()) {
-				todoRepo.delete(todo.get());
-				return "Task has been deleted"; 
-			}
-			else {
-				throw new RuntimeException("Task not found."); 
-			}
-			}	
+    @PostMapping("/todos/create")
+    public Todo save(@RequestBody Todo todoObj) {
+        todoRepo.save(todoObj);
+        return todoObj;
+    }
+
+    @DeleteMapping("/todos/{task}")
+    public String delete(@PathVariable String task) {
+
+		if (!todoRepo.existsById(task)) {
+			throw new RuntimeException("Task not found.");
+		}
+
+		todoRepo.deleteById(task);
+		return "Task has been deleted";
+    }
 }
 
 	
