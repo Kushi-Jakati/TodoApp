@@ -2,45 +2,65 @@ package com.app.ToDoApp.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import java.time.Instant;
 
 @Entity
 public class Todo {
     @Id
     private String task;
-    private String created;
-    private String due;
-    private String completed;
+    private Long created;
+    private Long due;
+    private Boolean completed;
+
+    public Todo() {
+    }
+
+    public Todo(String task, Long due) {
+        this.task = task;
+        this.due = due;
+        this.completed = false;
+    }
 
     public String getTask() {
         return task;
     }
 
-    public void setTask(String Task) {
-        this.task = Task;
+    public void setTask(String task) {
+        this.task = task;
     }
 
-    public String getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(String Created) {
-        this.created = Created;
+    public void setCreated(Long created) {
+        this.created = created;
     }
 
-    public String getDue() {
+    public Long getDue() {
         return due;
     }
 
-    public void setDue(String Due) {
-        this.due = Due;
+    public void setDue(Long due) {
+        this.due = due;
     }
 
-    public String getCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(String Completed) {
-        this.completed = Completed;
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
+    }
+
+    public boolean isInProgress() {
+        return !completed;
+    }
+
+    @PrePersist
+    void prePersist() {
+        this.created = Instant.now().getEpochSecond();
     }
 
     @Override
