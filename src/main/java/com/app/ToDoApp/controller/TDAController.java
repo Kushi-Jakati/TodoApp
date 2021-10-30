@@ -23,10 +23,10 @@ public class TDAController {
 		
 	}
 	
-	@PostMapping("/todos/create")
-	public Todo save(@RequestBody Todo todoObj) {
-		todoRepo.save(todoObj);
-		return todoObj; 
+	//@PostMapping("/todos/create")
+	//public Todo save(@RequestBody Todo todoObj) {
+		//todoRepo.save(todoObj);
+		//return todoObj; 
 	}
 	
 	@DeleteMapping("/todos/{Task}")
